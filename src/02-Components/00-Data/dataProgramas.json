@@ -1,0 +1,64 @@
+{
+  "ofertaAcademica" : [
+    {
+      "cod_utm": 110,
+      "escuelaFacultad": "Facultad de Ciencias Naturales",
+      "tipo": "Pregrado",
+      "categoriaTipo":"",
+      "url": "https://urosario.edu.co/programa-de-biologia",
+      "rutaImagenMin": "https://urosario.edu.co/sites/default/files/styles/program_67_41_md/public/2022-07/banner-administracion.jpg?itok=Se5_hOGG",
+      "descricionCorta": "Nuestro programa es único en Colombia, ya que ofrece una sólida formación científica y a su vez tiene una perspectiva amplia e interdisciplinaria. Aquí, múltiples ramas de la biología y otras ciencias interactúan para entender y afrontar los actuales desafíos globales en el marco del desarrollo sostenible: desde el surgimiento de enfermedades y plagas, hasta la pérdida de biodiversidad y cambio climático.",
+      "nombre": "Biología",
+      "precio": "13870000",
+      "snies": 1299
+    },
+    {
+      "cod_utm": 110,
+      "escuelaFacultad": "Facultad de Ciencias Naturales",
+      "tipo": "Pregrado",
+      "categoriaTipo":"",
+      "url": "https://urosario.edu.co/programa-de-biologia",
+      "rutaImagenMin": "https://urosario.edu.co/sites/default/files/styles/program_67_41_md/public/2022-07/banner-administracion.jpg?itok=Se5_hOGG",
+      "descricionCorta": "Nuestro programa es único en Colombia, ya que ofrece una sólida formación científica y a su vez tiene una perspectiva amplia e interdisciplinaria. Aquí, múltiples ramas de la biología y otras ciencias interactúan para entender y afrontar los actuales desafíos globales en el marco del desarrollo sostenible: desde el surgimiento de enfermedades y plagas, hasta la pérdida de biodiversidad y cambio climático.",
+      "nombre": "Biología",
+      "precio": "13870000",
+      "snies": 1299
+    },
+    {
+      "cod_utm": 110,
+      "escuelaFacultad": "Facultad de Ciencias Naturales",
+      "tipo": "Posgrado",
+      "categoriaTipo":"Maestría",
+      "url": "https://urosario.edu.co/programa-de-biologia",
+      "rutaImagenMin": "https://urosario.edu.co/sites/default/files/styles/program_67_41_md/public/2022-07/banner-administracion.jpg?itok=Se5_hOGG",
+      "descricionCorta": "Nuestro programa es único en Colombia, ya que ofrece una sólida formación científica y a su vez tiene una perspectiva amplia e interdisciplinaria. Aquí, múltiples ramas de la biología y otras ciencias interactúan para entender y afrontar los actuales desafíos globales en el marco del desarrollo sostenible: desde el surgimiento de enfermedades y plagas, hasta la pérdida de biodiversidad y cambio climático.",
+      "nombre": "Biología",
+      "precio": "13870000",
+      "snies": 1299
+    },
+    {
+      "cod_utm": 112,
+      "escuelaFacultad": "Facultad de Jurisprudencia",
+      "tipo": "Pregrado",
+      "categoriaTipo":"",
+      "url": "https://urosario.edu.co/jurisprudencia-derecho",
+      "rutaImagenMin": "https://urosario.edu.co/sites/default/files/styles/program_67_41_md/public/2023-01/Jurisprudencia---Derecho.png?itok=7P4DuYfY",
+      "descricionCorta": "Desde 1653, nuestra Facultad ha formado abogados de excelencia y ha sido cuna de importantes transformaciones jurídicas y políticas del país. Al estudiar Derecho en la Universidad del Rosario te formarás como un jurista integral, humanista, analítico y crítico que asume un compromiso con el país dentro de un contexto académico de alta exigencia y calidad. Nuestra enseñanza integra los debates sociojurídicos nacionales e internacionales para vincularlos a los aprendizajes de otras disciplinas en un contexto globalizado.",
+      "nombre": "Jurisprudencia",
+      "precio": "19214000 ",
+      "snies": 1299
+    },
+    {
+      "cod_utm": 152,
+      "escuelaFacultad": "Escuela de Administración",
+      "tipo": "Pregrado",
+      "categoriaTipo":"",
+      "url": "https://urosario.edu.co/administracion-de-empresas",
+      "rutaImagenMin": "https://urosario.edu.co/sites/default/files/styles/program_67_41_md/public/2022-07/banner-administracion.jpg?itok=Se5_hOGG",
+      "descricionCorta": "Estudiar Administración de Empresas en la Universidad del Rosario te prepara para liderar organizaciones que contribuyen a la construcción del progreso económico, social y cultural del país, con un alto sentido de responsabilidad social. Con nuestro programa desarrollarás las habilidades para emprender acciones orientadas a alcanzar la perdurabilidad empresarial, adquiriendo las competencias que requiere un profesional para orientar procesos estratégicos de la dirección y la gerencia.",
+      "nombre": "Administración de Empresas",
+      "precio": "18515000",
+      "snies": 1299
+    }
+  ]
+}
