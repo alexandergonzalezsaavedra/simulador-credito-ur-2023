@@ -1,21 +1,44 @@
 import { useEffect, useState } from 'react'
 import dataJson from '../00-Data/dataProgramas.json'
-
+import { useDispatch,useSelector } from 'react-redux'
+import dataFormulario from "../../01-Reducers/00-dataForm/dataFormSlice"
 const FormModule = () => {
 
-   // formato moneda pesos COP
-   const formatter = new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    minimumFractionDigits: 0
-  })
+  let dispatchForm = useDispatch()
+
+  let {res_form_cantidadCredito, res_form_cantidadCreditoDos} = useSelector(state => state.dataForm)
+
+  // formato moneda pesos COP
+  //  const formatter = new Intl.NumberFormat('es-CO', {
+  //   style: 'currency',
+  //   currency: 'COP',
+  //   minimumFractionDigits: 0
+  // })
+
+  console.log(res_form_cantidadCredito)
+  console.log(res_form_cantidadCreditoDos)
 
   let infoProgramas = dataJson.ofertaAcademica
   
-  let initialState = {valFormescuelaFacultad:"",valFormTipoCategoria:"", valFormCategoriaPosgrado: "",valFormProgramas: "", valFormPrecioPrograma: 5000, valFormFinanciar: 0, valFormFinanciarDos: 0}
+  let initialState = {
+    valFormescuelaFacultad:"",
+    valFormTipoCategoria:"", 
+    valFormCategoriaPosgrado: "",
+    valFormProgramas: "", 
+    valFormPrecioPrograma: 5000, 
+    valFormFinanciar: 0, 
+    valFormFinanciarDos: 0
+  }
   let [campos,setCampos] = useState(initialState)
-  let {valFormescuelaFacultad, valFormTipoCategoria, valFormCategoriaPosgrado,valFormProgramas,valFormPrecioPrograma, valFormFinanciar, valFormFinanciarDos } = campos
-
+  let { 
+    valFormescuelaFacultad, 
+    valFormTipoCategoria, 
+    valFormCategoriaPosgrado,
+    valFormProgramas,
+    valFormPrecioPrograma, 
+    valFormFinanciar, 
+    valFormFinanciarDos 
+  } = campos
 
   // Extraer escuelas y facultades
   let listaEscuelasFacultades = infoProgramas.filter((data, index, j) =>
@@ -39,14 +62,19 @@ const FormModule = () => {
   let categoriaPosgrado = ["Especialización","Maestría","Doctorado"].sort()
 
   // Extraer Programas segun la facultad, Tipo pre o pos y categoria pos elegida
-  let filtroProgramas = infoProgramas.filter((programas) => {
-    if(valFormTipoCategoria === "Pregrado"){
+
+  let dataProgramas = []
+  if(valFormTipoCategoria === "Pregrado"){
+    dataProgramas = infoProgramas.filter((programas) => {
       return(
         programas.escuelaFacultad.includes(valFormescuelaFacultad)
         &&
         programas.tipo.includes(valFormTipoCategoria)
       )
-    }else if(valFormTipoCategoria === "Posgrado"){
+    })
+  }
+  if(valFormTipoCategoria === "Posgrado"){
+    dataProgramas = infoProgramas.filter((programas) => {
       return(
         programas.escuelaFacultad.includes(valFormescuelaFacultad)
         &&
@@ -54,17 +82,12 @@ const FormModule = () => {
         &&
         programas.categoriaTipo.includes(valFormCategoriaPosgrado)
       )
-    }
-  })
-  let opcionesProgramas = filtroProgramas.map((programa,iPrograma) => {
-    let {nombre} = programa
-    return(
-      <option key={iPrograma} value={nombre}>{nombre}</option>
-    )
-  })
+    })
+  }
 
-  // funciones camnbio
+  // funciones camnbios formulario
   const handleChange = (e) => {
+    e.preventDefault()
     let {name,value,type} = e.target
     setCampos((a) => ({
       ...a,
@@ -73,87 +96,127 @@ const FormModule = () => {
   }
 
   useEffect(()=> {
-    setCampos({valFormPrecioPrograma: 5000, valFormFinanciarDos: document.getElementById("valFormFinanciar").value})
-  },[valFormFinanciar])
+    if(valFormFinanciar !== valFormFinanciarDos){
+      document.getElementById("valFormFinanciar").value = valFormFinanciarDos
+    }
+    if(valFormFinanciarDos !== valFormFinanciar){
+      document.getElementById("valFormFinanciarDos").value = valFormFinanciar
+    }
+  },[valFormFinanciar,valFormFinanciarDos])
 
-  useEffect(()=> {
-    setCampos({valFormPrecioPrograma: 5000, valFormFinanciar: document.getElementById("valFormFinanciarDos").value})
-  },[valFormFinanciarDos])
 
+  // useEffect(()=> {
+  //   enviarReducerUno()
+  // },[valFormFinanciar])
+
+  // useEffect(()=> {
+  //   enviarReducerDos()
+  // },[valFormFinanciarDos])
+
+  // let datoUno = document.getElementById("valFormFinanciar")
+  // let datoDos = document.getElementById("valFormFinanciarDos")
+
+  // const enviarReducerUno = () => {
+  //   dispatchForm(dataFormulario({
+  //     res_form_cantidadCredito: datoUno.value,
+  //     res_form_cantidadCreditoDos: datoUno.value,
+  //   }))
+  // }
+  // const enviarReducerDos = () => {
+  //   dispatchForm(dataFormulario({
+  //     res_form_cantidadCredito: datoDos.value,
+  //     res_form_cantidadCreditoDos: datoDos.value,
+  //   }))
+  // }
+
+
+  const handleSubmitData = (e) => {
+    e.preventDefault()
+    console.log(valFormFinanciar)
+    console.log(valFormFinanciarDos)
+    if(valFormFinanciar !== valFormFinanciarDos){
+      return(
+        dispatchForm(dataFormulario({
+          res_form_cantidadCredito: document.getElementById("valFormFinanciar").value,
+          res_form_cantidadCreditoDos: document.getElementById("valFormFinanciar").value,
+        }))
+      )
+    }else if(valFormFinanciarDos !== valFormFinanciar){
+      return(
+        dispatchForm(dataFormulario({
+          res_form_cantidadCredito: document.getElementById("valFormFinanciar").value,
+          res_form_cantidadCreditoDos: document.getElementById("valFormFinanciar").value,
+        }))
+      )
+    }
+    
+  }
 
   return (
     <>
-    <div>FormModule</div>
-    <h3 className='text-warning text-center'>
-        Simulador credito UR
-    </h3>
-    <hr />
-    <form>
-      <select 
-        className='form-select mb-3'
-        name="valFormescuelaFacultad"
-        id="valFormescuelaFacultad"
-        value={valFormescuelaFacultad}
-        onChange={handleChange}>
-          <option value="">Seleccione una Escuela o Facultad</option>
-          {
-            ordenarEscuelasFacultades.map((ef,i) => {
-              return(
-                <option key={i} value={ef}>{ef}</option>
-              )
-            })
+      <h3 className='text-warning text-center'>
+          Simulador credito UR
+      </h3>
+      <hr />
+      <form onSubmit={handleSubmitData}>
+        <select 
+          className='form-select mb-3'
+          name="valFormescuelaFacultad"
+          id="valFormescuelaFacultad"
+          value={valFormescuelaFacultad}
+          onChange={handleChange}>
+            <option value="">Seleccione una Escuela o Facultad</option>
+            {
+              ordenarEscuelasFacultades.map((ef,i) => {
+                return(
+                  <option key={i} value={ef}>{ef}</option>
+                )
+              })
+            }
+        </select>
+        <select 
+          className='form-select mb-3'
+          name="valFormTipoCategoria"
+          id="valFormTipoCategoria"
+          value={valFormTipoCategoria}
+          onChange={handleChange}>
+            <option value="">Seleccione categoría</option>
+            {
+              ordenarTipoCategoria.map((et,it) => {
+                return(
+                  <option key={it} value={et}>{et}</option>
+                )
+              })
+            }
+        </select>
+        {
+          (()=>{
+          if(valFormTipoCategoria === "Posgrado"){
+            return(
+              <select 
+                className='form-select mb-3'
+                name="valFormCategoriaPosgrado"
+                id="valFormCategoriaPosgrado"
+                value={valFormCategoriaPosgrado}
+                onChange={handleChange}>
+                  <option value="">Seleccione tipo</option>
+                  {
+                    categoriaPosgrado.map((cp,icp) => {
+                      return(
+                        <option key={icp} value={cp}>{cp}</option>
+                      )
+                    })
+                  }
+              </select>
+            )
+          }else{
+            return
           }
-      </select>
-      <select 
-        className='form-select mb-3'
-        name="valFormTipoCategoria"
-        id="valFormTipoCategoria"
-        value={valFormTipoCategoria}
-        onChange={handleChange}>
-          <option value="">Seleccione categoría</option>
-          {
-            ordenarTipoCategoria.map((et,it) => {
-              return(
-                <option key={it} value={et}>{et}</option>
-              )
-            })
-          }
-      </select>
-      {
-        (()=>{
-        if(valFormTipoCategoria === "Posgrado"){
-          return(
-            <select 
-              className='form-select mb-3'
-              name="valFormCategoriaPosgrado"
-              id="valFormCategoriaPosgrado"
-              value={valFormCategoriaPosgrado}
-              onChange={handleChange}>
-                <option value="">Seleccione tipo</option>
-                {
-                  categoriaPosgrado.map((cp,icp) => {
-                    return(
-                      <option key={icp} value={cp}>{cp}</option>
-                    )
-                  })
-                }
-            </select>
-          )
-        }else{
-          return
+          })()
         }
-        })()
-      }
-      {
-        (()=>{
-
-            if(opcionesProgramas.length <= 0 && valFormTipoCategoria === "Posgrado"){
-              return (
-                <h3 className='text-white'>
-                  No encontramos coincidencias
-                </h3>
-              )
-            }else if(opcionesProgramas.length > 0){
+        {
+          (()=>{
+            if(dataProgramas.length > 0){
               return(
                 <select
                   className='form-select mb-3'
@@ -162,43 +225,61 @@ const FormModule = () => {
                   value={valFormProgramas}
                   onChange={handleChange}>
                     <option value="">Seleccione Programa</option>
-                    {opcionesProgramas}
+                    {
+                      dataProgramas.map((p,pi) => {
+                        return(
+                          <option key={pi} value={p.nombre}>{p.nombre}</option>
+                        )
+                      })
+                    }
                 </select>
               )
             }
-        })()
-      }
-      
-
-
-                <input 
-                  className='form-control'
-                  type='text'
-                  name="valFormPrecioPrograma"
-                  id="valFormPrecioPrograma"
-                  value={valFormPrecioPrograma}
-                  onChange={handleChange}
-                />
-                <input
-                  className="form-control"
-                  type="number"
-                  name="valFormFinanciar"
-                  id="valFormFinanciar"
-                  value={valFormFinanciar}
-                  onChange={handleChange}
-                />
-                <br />
-                <input
-                  className="w-100"
-                  type="range"
-                  name="valFormFinanciarDos"
-                  id="valFormFinanciarDos"
-                  min="0"
-                  max={valFormPrecioPrograma}
-                  value={valFormFinanciarDos}
-                  onChange={handleChange}
-                />
-    </form>
+          })()
+        }
+        {
+          (()=>{
+            if(!valFormProgramas){
+              return
+            }else{
+              return(
+                <>
+                  <input 
+                    className='form-control'
+                    type='text'
+                    name="valFormPrecioPrograma"
+                    id="valFormPrecioPrograma"
+                    value={valFormPrecioPrograma}
+                    onChange={handleChange}
+                  />
+                  <input
+                    className="form-control"
+                    type="number"
+                    name="valFormFinanciar"
+                    id="valFormFinanciar"
+                    value={valFormFinanciar}
+                    onChange={handleChange}
+                  />
+                  <br />
+                  <input
+                    className="w-100"
+                    type="range"
+                    name="valFormFinanciarDos"
+                    id="valFormFinanciarDos"
+                    min="0"
+                    max={valFormPrecioPrograma}
+                    value={valFormFinanciarDos}
+                    onChange={handleChange}
+                  />
+                </>
+              )
+            } 
+          })()
+        }     
+        <button className='btn btn-outline-warning mt-5 rounded-0'>
+          Calcular
+        </button>
+      </form>
     </>
   )
 }
