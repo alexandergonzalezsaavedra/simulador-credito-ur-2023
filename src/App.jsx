@@ -4,10 +4,12 @@ const App = () => {
   return (
     <>
       <section>
-        <div className="container bg-dark py-5">
-          <div className="row d-flex justify-content-center">
-            <div className="col-sm-6">
-              <FormModule />
+        <div className="bg-dark py-5">
+          <div className="container">
+            <div className="row d-flex justify-content-center">
+              <div className="col-sm-6">
+                <FormModule />
+              </div>
             </div>
           </div>
         </div>

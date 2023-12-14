@@ -1,17 +1,18 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import dataJson from '../00-Data/dataProgramas.json'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {dataFormulario} from "../../01-Reducers/00-dataForm/dataFormSlice"
+
 const FormModule = () => {
+  let {res_form_cantidadCredito,res_form_cantidadCreditoDos} = useSelector(state => state.dataForm)
   let dispatchForm = useDispatch()
+  let infoProgramas = dataJson.ofertaAcademica
   //formato moneda pesos COP
   const formatter = new Intl.NumberFormat('es-CO', {
     style: 'currency',
     currency: 'COP',
     minimumFractionDigits: 0
   })
-  let infoProgramas = dataJson.ofertaAcademica
-
   let initialState = {
     valFormescuelaFacultad:"",
     valFormTipoCategoria:"", 
@@ -33,6 +34,19 @@ const FormModule = () => {
     valFormFinanciar, 
     valFormFinanciarDos 
   } = campos
+  // Limpiar Campos simulador
+ const limpiarSimulador = () => {
+  setCampos({
+    valFormescuelaFacultad:"",
+    valFormTipoCategoria:"", 
+    valFormCategoriaPosgrado: "",
+    valFormProgramas: "", 
+    valFormPrecioPrograma: 0,
+    valFormMesesCredito: 1,
+    valFormFinanciar: 0, 
+    valFormFinanciarDos: 0
+  })
+ }
   // Extraer escuelas y facultades
   let listaEscuelasFacultades = infoProgramas.filter((data, index, j) =>
     index === j.findIndex((t) => (t.index === data.index && t.escuelaFacultad === data.escuelaFacultad))
@@ -108,7 +122,6 @@ const FormModule = () => {
           res_form_cantidadCreditoDos: document.getElementById("valFormFinanciar").value,
         }))
       }
-      
     }
     if(e.target.matches("#valFormFinanciarDos")){
       if(valFormFinanciarDos < valFormFinanciar || valFormFinanciarDos > valFormFinanciar){
@@ -126,14 +139,19 @@ const FormModule = () => {
       }
     }
   })
+  console.log("VALOR CAMPO: " + res_form_cantidadCredito)
+  console.log("VALOR RANGO: " + res_form_cantidadCreditoDos)
+
+
+
   // Evento de envio
   const handleSubmitData = (e) => {
     e.preventDefault()
   }
   return (
     <>
-      <h3 className='text-warning text-center'>
-          Simulador credito UR
+      <h3 className='text-center'>
+          <em className='text-white'>Simulador crédito</em> <strong className='text-danger'>UR</strong>
       </h3>
       <hr />
       <form onSubmit={handleSubmitData}>
@@ -231,6 +249,21 @@ const FormModule = () => {
                     onChange={handleChange}
                     hidden
                   />
+                  <label htmlFor="valFormMesesCredito" className='text-white'>Tiempo del crédito en meses</label>
+                  <select 
+                  className='form-select mb-3'
+                  name="valFormMesesCredito"
+                  id="valFormMesesCredito"
+                  value={valFormMesesCredito}
+                  onChange={handleChange}>
+                    <option value="">Seleccione tiempo</option>
+                    <option value="1">1 Mes</option>
+                    <option value="2">2 Meses</option>
+                    <option value="3">3 Meses</option>
+                    <option value="4">4 Meses</option>
+                    <option value="5">5 Meses</option>
+                    <option value="6">6 Meses</option>
+                  </select>
                   <label className='mt-3 text-white' htmlFor="valFormFinanciar">
                     Cantidad a solicitar
                   </label>
@@ -240,13 +273,13 @@ const FormModule = () => {
                     name="valFormFinanciar"
                     id="valFormFinanciar"
                     maxLength={9}
-                    placeholder='0'
+                    placeholder={valFormFinanciar}
                     value={valFormFinanciar}
                     onChange={handleChange}
                   />
                   <br />
                   <input
-                    className="w-100"
+                    className="w-100 mb-3"
                     type="range"
                     name="valFormFinanciarDos"
                     id="valFormFinanciarDos"
@@ -259,10 +292,24 @@ const FormModule = () => {
               )
             } 
           })()
-        }     
-        <button className='btn btn-outline-warning mt-5 rounded-0'>
-          Calcular
-        </button>
+        } 
+        <hr />
+        <div className="row mx-0">
+          <div className="col-sm-4">
+          <button 
+            className='btn btn-outline-secondary mt-3 rounded-0 w-100'
+            onClick={limpiarSimulador}  
+          >
+            Limpiar simulador
+          </button>
+          </div>
+          <div className="col-sm-8">
+          <button 
+            className='btn btn-warning mt-3 rounded-0 w-100'>
+            Calcular
+          </button>
+          </div>
+        </div>
       </form>
     </>
   )
