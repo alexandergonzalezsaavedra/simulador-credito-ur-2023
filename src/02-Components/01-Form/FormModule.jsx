@@ -231,6 +231,9 @@ const FormModule = () => {
                     onChange={handleChange}
                     hidden
                   />
+                  <label className='mt-3 text-white' htmlFor="valFormFinanciar">
+                    Cantidad a solicitar
+                  </label>
                   <input
                     className="form-control"
                     type="text"
