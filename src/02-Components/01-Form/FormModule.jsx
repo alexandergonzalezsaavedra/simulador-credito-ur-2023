@@ -1,31 +1,24 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import dataJson from '../00-Data/dataProgramas.json'
-import { useDispatch,useSelector } from 'react-redux'
-import dataFormulario from "../../01-Reducers/00-dataForm/dataFormSlice"
+import { useDispatch } from 'react-redux'
+import {dataFormulario} from "../../01-Reducers/00-dataForm/dataFormSlice"
 const FormModule = () => {
-
   let dispatchForm = useDispatch()
-
-  let {res_form_cantidadCredito, res_form_cantidadCreditoDos} = useSelector(state => state.dataForm)
-
-  // formato moneda pesos COP
-  //  const formatter = new Intl.NumberFormat('es-CO', {
-  //   style: 'currency',
-  //   currency: 'COP',
-  //   minimumFractionDigits: 0
-  // })
-
-  console.log(res_form_cantidadCredito)
-  console.log(res_form_cantidadCreditoDos)
-
+  //formato moneda pesos COP
+  const formatter = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0
+  })
   let infoProgramas = dataJson.ofertaAcademica
-  
+
   let initialState = {
     valFormescuelaFacultad:"",
     valFormTipoCategoria:"", 
     valFormCategoriaPosgrado: "",
     valFormProgramas: "", 
-    valFormPrecioPrograma: 5000, 
+    valFormPrecioPrograma: 0,
+    valFormMesesCredito: 1,
     valFormFinanciar: 0, 
     valFormFinanciarDos: 0
   }
@@ -35,11 +28,11 @@ const FormModule = () => {
     valFormTipoCategoria, 
     valFormCategoriaPosgrado,
     valFormProgramas,
-    valFormPrecioPrograma, 
+    valFormPrecioPrograma,
+    valFormMesesCredito, 
     valFormFinanciar, 
     valFormFinanciarDos 
   } = campos
-
   // Extraer escuelas y facultades
   let listaEscuelasFacultades = infoProgramas.filter((data, index, j) =>
     index === j.findIndex((t) => (t.index === data.index && t.escuelaFacultad === data.escuelaFacultad))
@@ -48,7 +41,6 @@ const FormModule = () => {
       return ef.escuelaFacultad
   })
   let ordenarEscuelasFacultades = infoListaEscuelaFacultades.sort()
-
   // Extraer tipo
   let listaTipoCategoria = infoProgramas.filter((data, index, j) =>
     index === j.findIndex((t) => (t.index === data.index && t.tipo === data.tipo))
@@ -57,12 +49,9 @@ const FormModule = () => {
       return ef.tipo
   })
   let ordenarTipoCategoria = infoListaTipoCategoria
-
   // Categorias posgrado
   let categoriaPosgrado = ["Especialización","Maestría","Doctorado"].sort()
-
   // Extraer Programas segun la facultad, Tipo pre o pos y categoria pos elegida
-
   let dataProgramas = []
   if(valFormTipoCategoria === "Pregrado"){
     dataProgramas = infoProgramas.filter((programas) => {
@@ -84,8 +73,17 @@ const FormModule = () => {
       )
     })
   }
-
-  // funciones camnbios formulario
+  // Extraer precio programa
+  const precioPrograma  = infoProgramas.filter((dato) => {
+    return(
+      dato.nombre === valFormProgramas
+    )
+  })
+  let datoPrecio = precioPrograma.map(item => {
+    return item.precio
+  })
+  valFormPrecioPrograma = parseInt(datoPrecio[0])
+  // Evento camnbios en el formulario
   const handleChange = (e) => {
     e.preventDefault()
     let {name,value,type} = e.target
@@ -94,64 +92,44 @@ const FormModule = () => {
       [name]:type === "range" ? document.getElementById("valFormFinanciarDos").value : value
     }))
   }
-
-  useEffect(()=> {
-    if(valFormFinanciar !== valFormFinanciarDos){
-      document.getElementById("valFormFinanciar").value = valFormFinanciarDos
+  document.addEventListener("change", (e) => {
+    e.preventDefault()
+    if(e.target.matches("#valFormFinanciar")){
+      if(valFormFinanciar < valFormFinanciarDos || valFormFinanciar > valFormFinanciarDos){
+        document.getElementById("valFormFinanciarDos").value = document.getElementById("valFormFinanciar").value
+        dispatchForm(dataFormulario({
+          res_form_nombreUsuario:"",
+          res_form_escuelaFacultad: valFormescuelaFacultad,
+          res_form_tipo: valFormTipoCategoria,
+          res_form_programa: valFormProgramas,
+          res_form_costoSemestre:0,
+          res_form_mesesCredito: 0,
+          res_form_cantidadCredito: document.getElementById("valFormFinanciar").value,
+          res_form_cantidadCreditoDos: document.getElementById("valFormFinanciar").value,
+        }))
+      }
+      
     }
-    if(valFormFinanciarDos !== valFormFinanciar){
-      document.getElementById("valFormFinanciarDos").value = valFormFinanciar
+    if(e.target.matches("#valFormFinanciarDos")){
+      if(valFormFinanciarDos < valFormFinanciar || valFormFinanciarDos > valFormFinanciar){
+        document.getElementById("valFormFinanciar").value = document.getElementById("valFormFinanciarDos").value
+        dispatchForm(dataFormulario({
+          res_form_nombreUsuario:"",
+          res_form_escuelaFacultad: valFormescuelaFacultad,
+          res_form_tipo: valFormTipoCategoria,
+          res_form_programa: valFormProgramas,
+          res_form_costoSemestre:0,
+          res_form_mesesCredito: 0,
+          res_form_cantidadCredito: document.getElementById("valFormFinanciarDos").value,
+          res_form_cantidadCreditoDos: document.getElementById("valFormFinanciarDos").value,
+        }))
+      }
     }
-  },[valFormFinanciar,valFormFinanciarDos])
-
-
-  // useEffect(()=> {
-  //   enviarReducerUno()
-  // },[valFormFinanciar])
-
-  // useEffect(()=> {
-  //   enviarReducerDos()
-  // },[valFormFinanciarDos])
-
-  // let datoUno = document.getElementById("valFormFinanciar")
-  // let datoDos = document.getElementById("valFormFinanciarDos")
-
-  // const enviarReducerUno = () => {
-  //   dispatchForm(dataFormulario({
-  //     res_form_cantidadCredito: datoUno.value,
-  //     res_form_cantidadCreditoDos: datoUno.value,
-  //   }))
-  // }
-  // const enviarReducerDos = () => {
-  //   dispatchForm(dataFormulario({
-  //     res_form_cantidadCredito: datoDos.value,
-  //     res_form_cantidadCreditoDos: datoDos.value,
-  //   }))
-  // }
-
-
+  })
+  // Evento de envio
   const handleSubmitData = (e) => {
     e.preventDefault()
-    console.log(valFormFinanciar)
-    console.log(valFormFinanciarDos)
-    if(valFormFinanciar !== valFormFinanciarDos){
-      return(
-        dispatchForm(dataFormulario({
-          res_form_cantidadCredito: document.getElementById("valFormFinanciar").value,
-          res_form_cantidadCreditoDos: document.getElementById("valFormFinanciar").value,
-        }))
-      )
-    }else if(valFormFinanciarDos !== valFormFinanciar){
-      return(
-        dispatchForm(dataFormulario({
-          res_form_cantidadCredito: document.getElementById("valFormFinanciar").value,
-          res_form_cantidadCreditoDos: document.getElementById("valFormFinanciar").value,
-        }))
-      )
-    }
-    
   }
-
   return (
     <>
       <h3 className='text-warning text-center'>
@@ -251,12 +229,15 @@ const FormModule = () => {
                     id="valFormPrecioPrograma"
                     value={valFormPrecioPrograma}
                     onChange={handleChange}
+                    hidden
                   />
                   <input
                     className="form-control"
-                    type="number"
+                    type="text"
                     name="valFormFinanciar"
                     id="valFormFinanciar"
+                    maxLength={9}
+                    placeholder='0'
                     value={valFormFinanciar}
                     onChange={handleChange}
                   />
@@ -283,5 +264,4 @@ const FormModule = () => {
     </>
   )
 }
-
 export default FormModule
