@@ -10,7 +10,7 @@ input#valFormFinanciar {
   letter-spacing: 3px;
 }
 .drag__bar {
-  -webkit-appearance: none;
+  /* -webkit-appearance: none; */
   width: 100%;
   height: 15px;
   border-radius: 5px;

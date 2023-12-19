@@ -1,20 +1,10 @@
 import { useState } from 'react'
 import dataJson from '../00-Data/dataProgramas.json'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { dataFormulario } from "../../01-Reducers/00-dataForm/dataFormSlice"
-
 const FormModule = () => {
-
-
-  let { res_form_cantidadCredito } = useSelector(state => state.dataForm)
   let dispatchForm = useDispatch()
   let infoProgramas = dataJson.ofertaAcademica
-  //formato moneda pesos COP
-  const formatter = new Intl.NumberFormat('es-CO', {
-    //style: 'currency',
-    currency: 'COP',
-    minimumFractionDigits: 0
-  })
   let initialState = {
     valFormescuelaFacultad: "",
     valFormTipoCategoria: "",
@@ -120,16 +110,6 @@ const FormModule = () => {
           valFormFinanciar: document.getElementById("valFormFinanciar").value,
           valFormFinanciarDos: document.getElementById("valFormFinanciar").value
         })
-        dispatchForm(dataFormulario({
-          res_form_nombreUsuario: "",
-          res_form_escuelaFacultad: valFormescuelaFacultad,
-          res_form_tipo: valFormTipoCategoria,
-          res_form_programa: valFormProgramas,
-          res_form_costoSemestre: 0,
-          res_form_mesesCredito: 0,
-          res_form_cantidadCredito: document.getElementById("valFormFinanciar").value,
-          res_form_cantidadCreditoDos: document.getElementById("valFormFinanciar").value
-        }))
       }
     }
     if (e.target.matches("#valFormFinanciarDos")) {
@@ -145,16 +125,6 @@ const FormModule = () => {
           valFormFinanciar: document.getElementById("valFormFinanciarDos").value,
           valFormFinanciarDos: document.getElementById("valFormFinanciarDos").value
         })
-        dispatchForm(dataFormulario({
-          res_form_nombreUsuario: "",
-          res_form_escuelaFacultad: valFormescuelaFacultad,
-          res_form_tipo: valFormTipoCategoria,
-          res_form_programa: valFormProgramas,
-          res_form_costoSemestre: 0,
-          res_form_mesesCredito: 0,
-          res_form_cantidadCredito: document.getElementById("valFormFinanciarDos").value,
-          res_form_cantidadCreditoDos: document.getElementById("valFormFinanciarDos").value
-        }))
       }
     }
   }
@@ -170,6 +140,16 @@ const FormModule = () => {
   // Función de envio
   const handleSubmitData = (e) => {
     e.preventDefault()
+    dispatchForm(dataFormulario({
+      res_form_nombreUsuario: "",
+      res_form_escuelaFacultad: valFormescuelaFacultad,
+      res_form_tipo: valFormTipoCategoria,
+      res_form_programa: valFormProgramas,
+      res_form_costoSemestre: valFormPrecioPrograma,
+      res_form_mesesCredito: valFormMesesCredito,
+      res_form_cantidadCredito: valFormFinanciar,
+      res_form_cantidadCreditoDos: valFormFinanciarDos
+    }))
   }
   return (
     <>
