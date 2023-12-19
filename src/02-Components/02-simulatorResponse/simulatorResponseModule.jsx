@@ -26,10 +26,7 @@ const SimulatorResponseModule = () => {
                 } else {
                   return (
                     <>
-                      <p>
-                        Código UTM: {res_cod_utm}
-                      </p>
-                      <div className="card">
+                      <div className="card w-75">
                         <div className="card-header">
                           <p>
                             {res_escuelaFacultad}
@@ -37,9 +34,35 @@ const SimulatorResponseModule = () => {
                           <h3>
                             {res_nombrePrograma}
                           </h3>
+                          <p>
+                            Valor matrícula: {formatter.format(res_precio)}
+                          </p>
+                          <small>
+                            {res_cod_utm}
+                          </small>
                         </div>
                         <div className="card-body">
+                          <span>{res_tipo}</span>
                           <img className='img-fluid' src={res_rutaImagenMin} alt={res_nombrePrograma} />
+                          {
+                            (() => {
+                              if (res_snies) {
+                                return (
+                                  <span>SNIES: {res_snies}</span>
+                                )
+                              }
+                            })()
+                          }
+                          <p>
+                            {res_descricionCorta}
+                          </p>
+                        </div>
+                        <div className="card-footer">
+                          <div className="w-100 text-end">
+                            <a className='btn btn-outline-secondary' href={res_url} target='_blank' rel="noreferrer">
+                              Conoce más
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </>
