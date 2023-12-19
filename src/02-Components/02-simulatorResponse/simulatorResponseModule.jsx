@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 const SimulatorResponseModule = () => {
   // formato moneda pesos COP
   const formatter = new Intl.NumberFormat('es-CO', {
-    //style: 'currency',
+    style: 'currency',
     currency: 'COP',
     minimumFractionDigits: 0
   })

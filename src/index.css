@@ -1,102 +1,137 @@
-select:disabled,
-input:disabled {
-  background-color: #323334 !important;
-  color: #474747 !important;
-  border-color: #474747 !important;
-  opacity: 0.5 !important;
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Yanone+Kaffeesatz:wght@200;300;400;500;600&display=swap");
+
+.bg-form {
+  background: url(https://urosario.edu.co/sites/default/files/layout_background/banner-incripcion-pregrado-universidad-del-rosario.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 }
-input#valFormFinanciar {
+.tituloSimulador p {
+  text-align: left;
+  color: #000;
+  padding-top: 10%;
+  font-weight: 900;
+}
+.tituloSimulador span.hashtag {
+  display: table;
+  font-size: 18px;
+  color: #3f3f5e;
+  margin-bottom: -17px;
+  border-bottom: solid 2px;
+  padding: 0;
+  line-height: 24px;
+  margin-bottom: 4px;
+  font-family: "Oswald", sans-serif;
+}
+.tituloSimulador .tex-1 {
+  font-size: 3em;
+  font-weight: 300;
+  font-family: "Yanone Kaffeesatz", sans-serif;
+  letter-spacing: 0px;
+  line-height: 1.5em;
+  text-shadow: 0px 5px 3px #c3bfbf;
+}
+.tituloSimulador .tex-2,
+.tituloSimulador .tex-3,
+.tituloSimulador .tex-4 {
+  font-family: "Oswald", sans-serif;
+  font-size: 2em;
+  line-height: 1em;
+}
+.imgAspitanteCredito img {
+  width: 80%;
+}
+.titulo-formulario {
+  font-size: 2.5em;
+  text-align: center;
+}
+.titulo-formulario em {
+  font-family: "Yanone Kaffeesatz", sans-serif;
+}
+#formularioSimulador {
+  padding: 5%;
+  background: rgba(0, 0, 0, 0.1);
+}
+#formularioSimulador input#valFormFinanciar {
   padding-left: 30px;
   letter-spacing: 3px;
 }
-.drag__bar {
-  /* -webkit-appearance: none; */
+#formularioSimulador .drag__bar {
+  -webkit-appearance: none;
+  appearance: none;
   width: 100%;
   height: 15px;
   border-radius: 5px;
-  background: #d3d3d3;
+  background: #ffffff;
   outline: none;
   opacity: 0.7;
   -webkit-transition: 0.2s;
   transition: opacity 0.2s;
 }
-
-.drag__bar:hover {
+#formularioSimulador .drag__bar:hover {
   opacity: 1;
 }
-
-.drag__bar::-webkit-slider-thumb {
+#formularioSimulador .drag__bar::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 45px;
-  height: 45px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: #a4f3eb;
+  background: #da0921;
   cursor: pointer;
-  box-shadow: 0px 0px 11px 8px rgba(0, 0, 0, 0.26);
-  background: url(https://www.flaticon.com/svg/vstatic/svg/59/59089.svg?token=exp=1614064733~hmac=a6f0cce2214fdb52e7df9eec24006427)
-    #75b4c3;
-  background-size: 45%;
-  background-position: center;
-  background-repeat: no-repeat;
+  box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.1);
 }
-
-.drag__bar::-moz-range-thumb {
-  width: 45px;
-  height: 45px;
+#formularioSimulador .drag__bar::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: #a4f3eb;
+  background: #da0921;
   cursor: pointer;
-  box-shadow: 0px 0px 11px 8px rgba(0, 0, 0, 0.26);
-  background: url(https://www.flaticon.com/svg/vstatic/svg/59/59089.svg?token=exp=1614064733~hmac=a6f0cce2214fdb52e7df9eec24006427)
-    #75b4c3;
-  background-size: 45%;
-  background-position: center;
-  background-repeat: no-repeat;
+  box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.1);
 }
-.signoPesos {
+#formularioSimulador .signoPesos {
   position: absolute;
   margin-top: -31px;
   font-size: 17px;
   margin-left: 15px;
 }
-.puntuacionMiles {
+#formularioSimulador .puntuacionMiles {
   display: none;
   position: absolute;
   margin-top: -35px;
   font-size: 20px;
 }
-.puntuacionMiles.cuatro {
+#formularioSimulador .puntuacionMiles.cuatro {
   display: block;
   margin-left: 39px;
 }
-.puntuacionMiles.cinco {
+#formularioSimulador .puntuacionMiles.cinco {
   display: block;
   margin-left: 51px;
 }
-.puntuacionMiles.seis {
+#formularioSimulador .puntuacionMiles.seis {
   display: block;
   margin-left: 63px;
 }
-.puntuacionMiles.siete {
+#formularioSimulador .puntuacionMiles.siete {
   display: block;
   margin-left: 74px;
 }
-.puntuacionMiles.ocho {
+#formularioSimulador .puntuacionMiles.ocho {
   display: block;
   margin-left: 85px;
 }
-.puntuacionMillones {
+#formularioSimulador .puntuacionMillones {
   display: none;
   position: absolute;
   margin-top: -35px;
   font-size: 20px;
 }
-.puntuacionMillones.siete {
+#formularioSimulador .puntuacionMillones.siete {
   display: block;
   margin-left: 39px;
 }
-.puntuacionMillones.ocho {
+#formularioSimulador .puntuacionMillones.ocho {
   display: block;
   margin-left: 51px;
 }

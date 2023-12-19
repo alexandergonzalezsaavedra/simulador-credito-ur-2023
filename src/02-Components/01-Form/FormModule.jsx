@@ -3,6 +3,12 @@ import dataJson from '../00-Data/dataProgramas.json'
 import { useDispatch } from 'react-redux'
 import { dataFormulario } from "../../01-Reducers/00-dataForm/dataFormSlice"
 const FormModule = () => {
+  // formato moneda pesos COP
+  const formatter = new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0
+  })
   let dispatchForm = useDispatch()
   let infoProgramas = dataJson.ofertaAcademica
   let initialState = {
@@ -153,190 +159,231 @@ const FormModule = () => {
   }
   return (
     <>
-      <h3 className='text-center'>
-        <em className='text-white'>Simulador crédito</em> <strong className='text-danger'>UR</strong>
-      </h3>
-      <hr />
-      <form onSubmit={handleSubmitData}>
-        <select
-          className='form-select mb-3'
-          name="valFormescuelaFacultad"
-          id="valFormescuelaFacultad"
-          value={valFormescuelaFacultad}
-          onChange={handleChange}>
-          <option value="">Seleccione una Escuela o Facultad</option>
-          {
-            ordenarEscuelasFacultades.map((ef, i) => {
-              return (
-                <option key={i} value={ef}>{ef}</option>
-              )
-            })
-          }
-        </select>
-        <select
-          className='form-select mb-3'
-          name="valFormTipoCategoria"
-          id="valFormTipoCategoria"
-          value={valFormTipoCategoria}
-          onChange={handleChange}>
-          <option value="">Seleccione categoría</option>
-          {
-            ordenarTipoCategoria.map((et, it) => {
-              return (
-                <option key={it} value={et}>{et}</option>
-              )
-            })
-          }
-        </select>
-        {
-          (() => {
-            if (valFormTipoCategoria === "Posgrado") {
-              return (
+      <section className='bg-form'>
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-6">
+              <div className="row d-flex align-items-center h-100">
+                <div className='col-sm-4'>
+                  <div className="imgAspitanteCredito">
+                    <img className='img-fluid' src="https://urosario.edu.co/sites/default/files/2023-02/estudiantes-universidad-del-rosario-jpg.png" alt='Simulador Aspirante' />
+                  </div>
+                </div>
+                <div className='col-sm-6'>
+                  <div className="tituloSimulador">
+                    <p>
+                      <span class="hashtag">
+                        #URPorTusSueños
+                      </span>
+                      <span class="tex-1">
+                        ¡SUEÑA EN GRANDE,
+                      </span>
+                      <br />
+                      <span class="tex-2">
+                        CREEMOS EN TI!
+                      </span>
+                      <br />
+                      <span class="tex-3">
+                        APOYARTE ES NUESTRO
+                      </span>
+                      <br />
+                      <span class="tex-4">
+                        PROPÓSITO
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-sm-6 p-5">
+              <h3 className='titulo-formulario'>
+                <em>Simulador crédito</em> <strong>UR</strong>
+              </h3>
+              <hr />
+              <form id='formularioSimulador' onSubmit={handleSubmitData}>
                 <select
                   className='form-select mb-3'
-                  name="valFormCategoriaPosgrado"
-                  id="valFormCategoriaPosgrado"
-                  value={valFormCategoriaPosgrado}
+                  name="valFormescuelaFacultad"
+                  id="valFormescuelaFacultad"
+                  value={valFormescuelaFacultad}
                   onChange={handleChange}>
-                  <option value="">Seleccione tipo</option>
+                  <option value="">Seleccione una Escuela o Facultad</option>
                   {
-                    categoriaPosgrado.map((cp, icp) => {
+                    ordenarEscuelasFacultades.map((ef, i) => {
                       return (
-                        <option key={icp} value={cp}>{cp}</option>
+                        <option key={i} value={ef}>{ef}</option>
                       )
                     })
                   }
                 </select>
-              )
-            } else {
-              return
-            }
-          })()
-        }
-        {
-          (() => {
-            if (dataProgramas.length > 0) {
-              return (
                 <select
                   className='form-select mb-3'
-                  name="valFormProgramas"
-                  id="valFormProgramas"
-                  value={valFormProgramas}
+                  name="valFormTipoCategoria"
+                  id="valFormTipoCategoria"
+                  value={valFormTipoCategoria}
                   onChange={handleChange}>
-                  <option value="">Seleccione Programa</option>
+                  <option value="">Seleccione categoría</option>
                   {
-                    dataProgramas.map((p, pi) => {
+                    ordenarTipoCategoria.map((et, it) => {
                       return (
-                        <option key={pi} value={p.nombre}>{p.nombre}</option>
+                        <option key={it} value={et}>{et}</option>
                       )
                     })
                   }
                 </select>
-              )
-            }
-          })()
-        }
-        {
-          (() => {
-            if (!valFormProgramas) {
-              return
-            } else {
-              return (
-                <>
-                  <label htmlFor="valFormMesesCredito" className='text-white'>Tiempo del crédito <small>(meses)</small></label>
-                  <select
-                    className='form-select mb-3'
-                    name="valFormMesesCredito"
-                    id="valFormMesesCredito"
-                    value={valFormMesesCredito}
-                    onChange={handleChange}
-                  >
-                    <option value="" defaultValue>Seleccione tiempo</option>
-                    <option value="1 Mes">1 Mes</option>
-                    <option value="2 Meses">2 Meses</option>
-                    <option value="3 Meses">3 Meses</option>
-                    <option value="4 Meses">4 Meses</option>
-                    <option value="5 Meses">5 Meses</option>
-                    <option value="6 Meses">6 Meses</option>
-                  </select>
-                </>
-              )
-            }
-          })()
-        }
-        {
-          (() => {
-            if (valFormMesesCredito === "") {
-              return
-            } else {
-              return (
-                <>
-                  <input
-                    className='form-control'
-                    type='text'
-                    name="valFormPrecioPrograma"
-                    id="valFormPrecioPrograma"
-                    value={valFormPrecioPrograma}
-                    onChange={handleChange}
-                    hidden
-                  />
-                  <label className='mt-3 text-white' htmlFor="valFormFinanciar">
-                    Cantidad a solicitar
-                  </label>
-                  <input
-                    maxLength={8}
-                    className="form-control"
-                    type="text"
-                    name="valFormFinanciar"
-                    id="valFormFinanciar"
-                    value={valFormFinanciar}
-                    onChange={handleChange}
-                  />
-                  <div className="signoPesos">
-                    $
+                {
+                  (() => {
+                    if (valFormTipoCategoria === "Posgrado") {
+                      return (
+                        <select
+                          className='form-select mb-3'
+                          name="valFormCategoriaPosgrado"
+                          id="valFormCategoriaPosgrado"
+                          value={valFormCategoriaPosgrado}
+                          onChange={handleChange}>
+                          <option value="">Seleccione tipo</option>
+                          {
+                            categoriaPosgrado.map((cp, icp) => {
+                              return (
+                                <option key={icp} value={cp}>{cp}</option>
+                              )
+                            })
+                          }
+                        </select>
+                      )
+                    } else {
+                      return
+                    }
+                  })()
+                }
+                {
+                  (() => {
+                    if (dataProgramas.length > 0) {
+                      return (
+                        <select
+                          className='form-select mb-3'
+                          name="valFormProgramas"
+                          id="valFormProgramas"
+                          value={valFormProgramas}
+                          onChange={handleChange}>
+                          <option value="">Seleccione Programa</option>
+                          {
+                            dataProgramas.map((p, pi) => {
+                              return (
+                                <option key={pi} value={p.nombre}>{p.nombre}</option>
+                              )
+                            })
+                          }
+                        </select>
+                      )
+                    }
+                  })()
+                }
+                {
+                  (() => {
+                    if (!valFormProgramas) {
+                      return
+                    } else {
+                      return (
+                        <>
+                          <label htmlFor="valFormMesesCredito">Tiempo del crédito <small>(meses)</small></label>
+                          <select
+                            className='form-select mb-3'
+                            name="valFormMesesCredito"
+                            id="valFormMesesCredito"
+                            value={valFormMesesCredito}
+                            onChange={handleChange}
+                          >
+                            <option value="" defaultValue>Seleccione tiempo</option>
+                            <option value="1">1 Mes</option>
+                            <option value="2">2 Meses</option>
+                            <option value="3">3 Meses</option>
+                            <option value="4">4 Meses</option>
+                            <option value="5">5 Meses</option>
+                            <option value="6">6 Meses</option>
+                          </select>
+                        </>
+                      )
+                    }
+                  })()
+                }
+                {
+                  (() => {
+                    if (valFormMesesCredito === "") {
+                      return
+                    } else {
+                      return (
+                        <>
+                          <input
+                            className='form-control'
+                            type='text'
+                            name="valFormPrecioPrograma"
+                            id="valFormPrecioPrograma"
+                            value={valFormPrecioPrograma}
+                            onChange={handleChange}
+                            hidden
+                          />
+                          <label htmlFor="valFormFinanciar">
+                            Cantidad a solicitar <small>(Maximo: {formatter.format(valFormPrecioPrograma)})</small>
+                          </label>
+                          <input
+                            maxLength={8}
+                            className="form-control"
+                            type="number"
+                            max={valFormPrecioPrograma}
+                            step="50000"
+                            name="valFormFinanciar"
+                            id="valFormFinanciar"
+                            value={valFormFinanciar}
+                            onChange={handleChange}
+                          />
+                          <div className="signoPesos">
+                            $
+                          </div>
+                          <div className={`puntuacionMiles ${puntuacion}`}>
+                            ,
+                          </div>
+                          <div className={`puntuacionMillones ${puntuacion}`}>
+                            ,
+                          </div>
+                          <br />
+                          <input
+                            className="w-100 mb-3 drag__bar"
+                            type="range"
+                            name="valFormFinanciarDos"
+                            id="valFormFinanciarDos"
+                            min="0"
+                            max={valFormPrecioPrograma}
+                            value={valFormFinanciarDos}
+                            onChange={handleChange}
+                          />
+                        </>
+                      )
+                    }
+                  })()
+                }
+                <hr />
+                <div className="row mx-0 d-flex justify-content-between">
+                  <div className="col-sm-3">
+                    <button
+                      className='mt-3 btn btn-outline-secondary w-100 rounded-0'
+                      onClick={limpiarSimulador}
+                    >
+                      Limpiar
+                    </button>
                   </div>
-                  <div className={`puntuacionMiles ${puntuacion}`}>
-                    ,
+                  <div className="col-sm-8">
+                    <button
+                      className='btn btn-danger mt-3 rounded-0 w-100'>
+                      Calcular
+                    </button>
                   </div>
-                  <div className={`puntuacionMillones ${puntuacion}`}>
-                    ,
-                  </div>
-                  <br />
-                  <input
-                    className="w-100 mb-3 drag__bar"
-                    type="range"
-                    name="valFormFinanciarDos"
-                    id="valFormFinanciarDos"
-                    min="0"
-                    max={valFormPrecioPrograma}
-                    value={valFormFinanciarDos}
-                    onChange={handleChange}
-                  />
-                </>
-              )
-            }
-          })()
-        }
-        <hr />
-        <div className="row mx-0">
-          <div className="col-sm-12">
-            <button
-              className='btn btn-warning mt-3 rounded-0 w-100'>
-              Calcular
-            </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </form>
-      <div className="row d-flex justify-content-end mx-0 mt-5">
-        <div className="col-sm-3">
-          <button
-            className='btn btn-outline-secondary w-100 rounded-0'
-            onClick={limpiarSimulador}
-          >
-            Limpiar
-          </button>
-        </div>
-      </div>
+      </section>
     </>
   )
 }
