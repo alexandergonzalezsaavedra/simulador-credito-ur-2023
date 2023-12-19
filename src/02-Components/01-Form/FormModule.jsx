@@ -1,7 +1,9 @@
+import Swal from 'sweetalert2'
 import { useState } from 'react'
 import dataJson from '../00-Data/dataProgramas.json'
 import { useDispatch } from 'react-redux'
 import { dataFormulario } from "../../01-Reducers/00-dataForm/dataFormSlice"
+import { dataProgramaSeleccionado } from "../../01-Reducers/01-responseData/dataResponseSlice"
 const FormModule = () => {
   // formato moneda pesos COP
   const formatter = new Intl.NumberFormat('es-CO', {
@@ -10,6 +12,7 @@ const FormModule = () => {
     minimumFractionDigits: 0
   })
   let dispatchForm = useDispatch()
+  let dispatchDataProgram = useDispatch()
   let infoProgramas = dataJson.ofertaAcademica
   let initialState = {
     valFormescuelaFacultad: "",
@@ -44,6 +47,18 @@ const FormModule = () => {
       valFormFinanciar: 0,
       valFormFinanciarDos: 0
     })
+    dispatchDataProgram(dataProgramaSeleccionado({
+      res_cod_utm: 0,
+      res_escuelaFacultad: "",
+      res_nombrePrograma: "",
+      res_tipo: "",
+      res_categoriaTipo: "",
+      res_precio: "",
+      res_rutaImagenMin: "",
+      res_descricionCorta: "",
+      res_url: "",
+      res_snies: 0
+    }))
   }
   // Extraer escuelas y facultades
   let listaEscuelasFacultades = infoProgramas.filter((data, index, j) =>
@@ -104,7 +119,7 @@ const FormModule = () => {
       [name]: type === "checkbox" ? checked : value
     }))
     if (e.target.matches("#valFormFinanciar")) {
-      if (valFormFinanciar < valFormFinanciarDos || valFormFinanciar > valFormFinanciarDos) {
+      if (valFormFinanciar < valFormFinanciarDos || valFormFinanciar > valFormFinanciarDos || valFormFinanciar !== valFormFinanciarDos) {
         document.getElementById("valFormFinanciarDos").value = document.getElementById("valFormFinanciar").value
         setCampos({
           valFormescuelaFacultad: valFormescuelaFacultad,
@@ -119,7 +134,7 @@ const FormModule = () => {
       }
     }
     if (e.target.matches("#valFormFinanciarDos")) {
-      if (valFormFinanciarDos < valFormFinanciar || valFormFinanciarDos > valFormFinanciar) {
+      if (valFormFinanciarDos < valFormFinanciar || valFormFinanciarDos > valFormFinanciar || valFormFinanciarDos !== valFormFinanciar) {
         document.getElementById("valFormFinanciar").value = document.getElementById("valFormFinanciarDos").value
         setCampos({
           valFormescuelaFacultad: valFormescuelaFacultad,
@@ -133,19 +148,75 @@ const FormModule = () => {
         })
       }
     }
+    let programaSeleccionado = dataProgramas[0]
+    if (programaSeleccionado) {
+      let {
+        cod_utm,
+        escuelaFacultad,
+        nombre,
+        tipo,
+        categoriaTipo,
+        rutaImagenMin,
+        precio,
+        url,
+        descricionCorta,
+        snies
+      } = programaSeleccionado
+      dispatchDataProgram(dataProgramaSeleccionado({
+        res_cod_utm: cod_utm,
+        res_escuelaFacultad: escuelaFacultad,
+        res_nombrePrograma: nombre,
+        res_tipo: tipo,
+        res_categoriaTipo: categoriaTipo,
+        res_rutaImagenMin: rutaImagenMin,
+        res_precio: precio,
+        res_descricionCorta: descricionCorta,
+        res_url: url,
+        res_snies: snies
+      }))
+    }
   }
   let puntuacion =
-    valFormFinanciar.length === 1 ? `un` :
-      valFormFinanciar.length === 2 ? `dos` :
-        valFormFinanciar.length === 3 ? `tres` :
-          valFormFinanciar.length === 4 ? `cuatro` :
-            valFormFinanciar.length === 5 ? `cinco` :
-              valFormFinanciar.length === 6 ? `seis` :
-                valFormFinanciar.length === 7 ? `siete` :
-                  valFormFinanciar.length === 8 ? `ocho` : ""
+    valFormFinanciar === 0 ? "" :
+      valFormFinanciar.length === 1 ? `un` :
+        valFormFinanciar.length === 2 ? `dos` :
+          valFormFinanciar.length === 3 ? `tres` :
+            valFormFinanciar.length === 4 ? `cuatro` :
+              valFormFinanciar.length === 5 ? `cinco` :
+                valFormFinanciar.length === 6 ? `seis` :
+                  valFormFinanciar.length === 7 ? `siete` :
+                    valFormFinanciar.length === 8 ? `ocho` : ""
+  const limpiarCamposCredito = () => {
+    document.getElementById("valFormFinanciar").value = 0
+    document.getElementById("valFormFinanciarDos").value = 0
+    setCampos({
+      valFormescuelaFacultad: valFormescuelaFacultad,
+      valFormTipoCategoria: valFormTipoCategoria,
+      valFormCategoriaPosgrado: valFormCategoriaPosgrado,
+      valFormProgramas: valFormProgramas,
+      valFormMesesCredito: valFormMesesCredito,
+      valFormPrecioPrograma: valFormPrecioPrograma,
+      valFormFinanciar: 0,
+      valFormFinanciarDos: 0
+    })
+  }
   // Función de envio
   const handleSubmitData = (e) => {
     e.preventDefault()
+    if (valFormFinanciar > valFormPrecioPrograma) {
+      limpiarCamposCredito()
+      return Swal.fire({
+        title: '¡Error!',
+        html: `El valor ingresado supera el valor de la matrícula.
+                <br>
+                Por favor intentelo nuevamente con un valor inferior
+                <br><br>
+                El valor de la matrícula es ${formatter.format(valFormPrecioPrograma)}
+                `,
+        icon: 'warning',
+        confirmButtonText: 'Cerrar'
+      })
+    }
     dispatchForm(dataFormulario({
       res_form_nombreUsuario: "",
       res_form_escuelaFacultad: valFormescuelaFacultad,
@@ -172,22 +243,22 @@ const FormModule = () => {
                 <div className='col-sm-6'>
                   <div className="tituloSimulador">
                     <p>
-                      <span class="hashtag">
+                      <span className="hashtag">
                         #URPorTusSueños
                       </span>
-                      <span class="tex-1">
+                      <span className="tex-1">
                         ¡SUEÑA EN GRANDE,
                       </span>
                       <br />
-                      <span class="tex-2">
+                      <span className="tex-2">
                         CREEMOS EN TI!
                       </span>
                       <br />
-                      <span class="tex-3">
+                      <span className="tex-3">
                         APOYARTE ES NUESTRO
                       </span>
                       <br />
-                      <span class="tex-4">
+                      <span className="tex-4">
                         PROPÓSITO
                       </span>
                     </p>
@@ -199,7 +270,6 @@ const FormModule = () => {
               <h3 className='titulo-formulario'>
                 <em>Simulador crédito</em> <strong>UR</strong>
               </h3>
-              <hr />
               <form id='formularioSimulador' onSubmit={handleSubmitData}>
                 <select
                   className='form-select mb-3'
@@ -329,9 +399,7 @@ const FormModule = () => {
                           <input
                             maxLength={8}
                             className="form-control"
-                            type="number"
-                            max={valFormPrecioPrograma}
-                            step="50000"
+                            type="text"
                             name="valFormFinanciar"
                             id="valFormFinanciar"
                             value={valFormFinanciar}
@@ -364,17 +432,17 @@ const FormModule = () => {
                 }
                 <hr />
                 <div className="row mx-0 d-flex justify-content-between">
-                  <div className="col-sm-3">
+                  <div className="col-sm-2">
                     <button
                       className='mt-3 btn btn-outline-secondary w-100 rounded-0'
+                      rel="noreferrer"
                       onClick={limpiarSimulador}
                     >
-                      Limpiar
+                      <i className="fas fa-backspace"></i>
                     </button>
                   </div>
                   <div className="col-sm-8">
-                    <button
-                      className='btn btn-danger mt-3 rounded-0 w-100'>
+                    <button className='btn btn-danger mt-3 rounded-0 w-100' type='submit'>
                       Calcular
                     </button>
                   </div>

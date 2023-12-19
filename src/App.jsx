@@ -4,11 +4,7 @@ const App = () => {
   return (
     <>
       <FormModule />
-      <section>
-        <div className="container">
-          <SimulatorResponseModule />
-        </div>
-      </section>
+      <SimulatorResponseModule />
     </>
   );
 }
